@@ -4,8 +4,9 @@
 """Generated protocol buffer code."""
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import descriptor_pool as _descriptor_pool
+from google.protobuf import message as _message
+from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
-from google.protobuf.internal import builder as _builder
 # @@protoc_insertion_point(imports)
 
 _sym_db = _symbol_database.Default()
@@ -13,68 +14,334 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rlba2pba.proto\x12\x07lba2pba\"_\n\x03PBA\x12\x0c\n\x04\x44isk\x18\x01 \x01(\t\x12\x0c\n\x04Host\x18\x02 \x01(\t\x12\x0e\n\x06Offset\x18\x03 \x01(\x03\x12\x0e\n\x06Length\x18\x04 \x01(\x03\x12\r\n\x05Major\x18\x05 \x01(\x03\x12\r\n\x05Minor\x18\x06 \x01(\x03\"5\n\nReplicaPba\x12\x19\n\x03Pba\x18\x01 \x03(\x0b\x32\x0c.lba2pba.PBA\x12\x0c\n\x04Node\x18\x02 \x01(\t\"g\n\x07\x46ilePBA\x12\x19\n\x03Pba\x18\x01 \x03(\x0b\x32\x0c.lba2pba.PBA\x12!\n\x04rPba\x18\x02 \x03(\x0b\x32\x13.lba2pba.ReplicaPba\x12\x10\n\x08\x46ileName\x18\x03 \x01(\t\x12\x0c\n\x04Type\x18\x04 \x01(\t\",\n\x07\x46ileMap\x12!\n\x07\x46ilePba\x18\x01 \x03(\x0b\x32\x10.lba2pba.FilePBA\"s\n\x06VShard\x12\x0f\n\x07VolName\x18\x01 \x01(\t\x12)\n\tShardList\x18\x02 \x03(\x0b\x32\x16.lba2pba.VShard.FShard\x1a-\n\x06\x46Shard\x12\x10\n\x08\x46ileName\x18\x01 \x01(\t\x12\x11\n\tshardList\x18\x02 \x03(\t\"#\n\x10WGetShardRequest\x12\x0f\n\x07VolName\x18\x01 \x01(\t\"8\n\x11WGetShardResponse\x12#\n\nvShardList\x18\x01 \x03(\x0b\x32\x0f.lba2pba.VShard\"\"\n\x0eWGetPbaRequest\x12\x10\n\x08\x46ileName\x18\x01 \x01(\t\"\xa3\x01\n\x0fWGetPbaResponse\x12*\n\x03Pba\x18\x01 \x03(\x0b\x32\x1d.lba2pba.WGetPbaResponse.Data\x12\x0c\n\x04\x44isk\x18\x02 \x01(\t\x12\x10\n\x08\x46ileName\x18\x03 \x01(\t\x1a\x44\n\x04\x44\x61ta\x12\r\n\x05Major\x18\x01 \x01(\x03\x12\r\n\x05Minor\x18\x02 \x01(\x03\x12\x0e\n\x06Offset\x18\x03 \x01(\x03\x12\x0e\n\x06Length\x18\x04 \x01(\x03\"3\n\x0eTGetPbaRequest\x12\x10\n\x08\x46ileName\x18\x01 \x01(\t\x12\x0f\n\x07VolName\x18\x02 \x01(\t\"O\n\x0fTGetPbaResponse\x12\x19\n\x03Pba\x18\x01 \x03(\x0b\x32\x0c.lba2pba.PBA\x12!\n\x04RPba\x18\x02 \x03(\x0b\x32\x13.lba2pba.ReplicaPba\"G\n\x10\x43reatePvcRequest\x12\x0f\n\x07PvcName\x18\x01 \x01(\t\x12\x0f\n\x07PvcType\x18\x02 \x01(\t\x12\x11\n\tDupliType\x18\x03 \x01(\t\"1\n\x11\x43reatePvcResponse\x12\x0b\n\x03Msg\x18\x01 \x01(\t\x12\x0f\n\x07PvcName\x18\x02 \x01(\t\"#\n\x10\x44\x65letePvcRequest\x12\x0f\n\x07PvcName\x18\x01 \x01(\t\"1\n\x11\x44\x65letePvcResponse\x12\x0b\n\x03Msg\x18\x01 \x01(\t\x12\x0f\n\x07PvcName\x18\x02 \x01(\t\",\n\x0cGetFMRequest\x12\n\n\x02Ip\x18\x01 \x01(\t\x12\x10\n\x08\x46ileList\x18\x02 \x03(\t\"2\n\rGetFMResponse\x12!\n\x07\x46ileMap\x18\x01 \x01(\x0b\x32\x10.lba2pba.FileMap\"/\n\x0fUpdateFMRequest\x12\n\n\x02Ip\x18\x01 \x01(\t\x12\x10\n\x08\x46ileList\x18\x02 \x03(\t\"5\n\x10UpdateFMResponse\x12!\n\x07\x46ileMap\x18\x01 \x01(\x0b\x32\x10.lba2pba.FileMap\"\x80\x01\n\x0eQGetPbaRequest\x12\x31\n\x08Requests\x18\x01 \x03(\x0b\x32\x1f.lba2pba.QGetPbaRequest.Request\x1a;\n\x07Request\x12\x10\n\x08\x46ileName\x18\x01 \x01(\t\x12\x0e\n\x06Offset\x18\x02 \x01(\x03\x12\x0e\n\x06Length\x18\x03 \x01(\x03\"4\n\x0fQGetPbaResponse\x12!\n\x07\x46ilePba\x18\x01 \x03(\x0b\x32\x10.lba2pba.FilePBA2I\n\nQueryAgent\x12;\n\x06GetPba\x12\x17.lba2pba.QGetPbaRequest\x1a\x18.lba2pba.QGetPbaResponse2\x8a\x02\n\x07Manager\x12\x42\n\tCreatePvc\x12\x19.lba2pba.CreatePvcRequest\x1a\x1a.lba2pba.CreatePvcResponse\x12\x42\n\tDeletePvc\x12\x19.lba2pba.DeletePvcRequest\x1a\x1a.lba2pba.DeletePvcResponse\x12\x36\n\x05GetFM\x12\x15.lba2pba.GetFMRequest\x1a\x16.lba2pba.GetFMResponse\x12?\n\x08UpdateFM\x12\x18.lba2pba.UpdateFMRequest\x1a\x19.lba2pba.UpdateFMResponse2A\n\x05Trace\x12\x38\n\x03Get\x12\x17.lba2pba.TGetPbaRequest\x1a\x18.lba2pba.TGetPbaResponse2\x89\x01\n\x06Worker\x12\x38\n\x03Get\x12\x17.lba2pba.WGetPbaRequest\x1a\x18.lba2pba.WGetPbaResponse\x12\x45\n\x0cGetShardList\x12\x19.lba2pba.WGetShardRequest\x1a\x1a.lba2pba.WGetShardResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rlba2pba.proto\x12\x07lba2pba\"_\n\x03PBA\x12\x0c\n\x04\x64isk\x18\x01 \x01(\t\x12\x0c\n\x04host\x18\x02 \x01(\t\x12\x0e\n\x06offset\x18\x03 \x01(\x03\x12\x0e\n\x06length\x18\x04 \x01(\x03\x12\r\n\x05major\x18\x05 \x01(\x03\x12\r\n\x05minor\x18\x06 \x01(\x03\"5\n\nReplicaPba\x12\x19\n\x03pba\x18\x01 \x03(\x0b\x32\x0c.lba2pba.PBA\x12\x0c\n\x04Node\x18\x02 \x01(\t\"x\n\x07\x46ilePBA\x12\x19\n\x03pba\x18\x01 \x03(\x0b\x32\x0c.lba2pba.PBA\x12!\n\x04rPba\x18\x02 \x03(\x0b\x32\x13.lba2pba.ReplicaPba\x12\x10\n\x08\x66ileName\x18\x03 \x01(\t\x12\x0f\n\x07volName\x18\x04 \x01(\t\x12\x0c\n\x04type\x18\x05 \x01(\t\",\n\x07\x46ileMap\x12!\n\x07\x66ilePba\x18\x01 \x03(\x0b\x32\x10.lba2pba.FilePBA\"\x1e\n\x0cWInitRequest\x12\x0e\n\x06signal\x18\x01 \x01(\t\"2\n\rWInitResponse\x12!\n\x07\x66ilePba\x18\x01 \x03(\x0b\x32\x10.lba2pba.FilePBA\"$\n\x12TGetFileMapRequest\x12\x0e\n\x06signal\x18\x01 \x01(\t\"8\n\x13TGetFileMapResponse\x12!\n\x07\x66ileMap\x18\x01 \x01(\x0b\x32\x10.lba2pba.FileMap\"C\n\x0eTChangeRequest\x12\x0e\n\x06\x61\x63tion\x18\x01 \x01(\t\x12!\n\x07\x66ilePba\x18\x02 \x01(\x0b\x32\x10.lba2pba.FilePBA\"\x1e\n\x0fTChangeResponse\x12\x0b\n\x03res\x18\x01 \x01(\t\" \n\x10TRegisterRequest\x12\x0c\n\x04\x61\x64\x64r\x18\x01 \x01(\t\" \n\x11TRegisterResponse\x12\x0b\n\x03res\x18\x01 \x01(\t\"\"\n\x12TDeregisterRequest\x12\x0c\n\x04\x61\x64\x64r\x18\x01 \x01(\t\"\"\n\x13TDeregisterResponse\x12\x0b\n\x03res\x18\x01 \x01(\t\"\x82\x01\n\x0f\x46\x41GetPbaRequest\x12\x32\n\x08requests\x18\x01 \x03(\x0b\x32 .lba2pba.FAGetPbaRequest.Request\x1a;\n\x07Request\x12\x10\n\x08\x66ileName\x18\x01 \x01(\t\x12\x0e\n\x06offset\x18\x02 \x01(\x03\x12\x0e\n\x06length\x18\x03 \x01(\x03\"5\n\x10\x46\x41GetPbaResponse\x12!\n\x07\x66ilePba\x18\x01 \x03(\x0b\x32\x10.lba2pba.FilePBA\"B\n\rFAPushRequest\x12\x0e\n\x06\x61\x63tion\x18\x01 \x01(\t\x12!\n\x07\x66ilePba\x18\x02 \x01(\x0b\x32\x10.lba2pba.FilePBA\"#\n\x13\x46MRegisterQARequest\x12\x0c\n\x04\x61\x64\x64r\x18\x01 \x01(\t\"#\n\x14\x46MRegisterQAResponse\x12\x0b\n\x03res\x18\x01 \x01(\t\"%\n\x15\x46MDeregisterQARequest\x12\x0c\n\x04\x61\x64\x64r\x18\x01 \x01(\t\"%\n\x16\x46MDeregisterQAResponse\x12\x0b\n\x03res\x18\x01 \x01(\t\"-\n\x0e\x46\x41PushResponse\x12\x0b\n\x03msg\x18\x01 \x01(\t\x12\x0e\n\x06status\x18\x02 \x01(\t\"3\n\x13\x46MGetFileMapRequest\x12\n\n\x02ip\x18\x01 \x01(\t\x12\x10\n\x08\x66ileList\x18\x02 \x03(\t\"9\n\x14\x46MGetFileMapResponse\x12!\n\x07\x66ileMap\x18\x01 \x01(\x0b\x32\x10.lba2pba.FileMap\"E\n\x10\x46MPushPbaRequest\x12\x0e\n\x06\x61\x63tion\x18\x01 \x01(\t\x12!\n\x07\x66ilePba\x18\x02 \x01(\x0b\x32\x10.lba2pba.FilePBA\"0\n\x11\x46MPushPbaResponse\x12\x0b\n\x03msg\x18\x01 \x01(\t\x12\x0e\n\x06status\x18\x02 \x01(\t\"G\n\x10\x43reatePvcRequest\x12\x0f\n\x07pvcName\x18\x01 \x01(\t\x12\x0f\n\x07pvcType\x18\x02 \x01(\t\x12\x11\n\tdupliType\x18\x03 \x01(\t\"1\n\x11\x43reatePvcResponse\x12\x0b\n\x03msg\x18\x01 \x01(\t\x12\x0f\n\x07pvcName\x18\x02 \x01(\t\"#\n\x10\x44\x65letePvcRequest\x12\x0f\n\x07pvcName\x18\x01 \x01(\t\"1\n\x11\x44\x65letePvcResponse\x12\x0b\n\x03msg\x18\x01 \x01(\t\x12\x0f\n\x07pvcName\x18\x02 \x01(\t2\x89\x01\n\x0b\x44\x42\x46ileAgent\x12=\n\x06GetPba\x12\x18.lba2pba.FAGetPbaRequest\x1a\x19.lba2pba.FAGetPbaResponse\x12;\n\x08PushFile\x12\x16.lba2pba.FAPushRequest\x1a\x17.lba2pba.FAPushResponse2\xc0\x03\n\rDBFileManager\x12I\n\nRegisterQA\x12\x1c.lba2pba.FMRegisterQARequest\x1a\x1d.lba2pba.FMRegisterQAResponse\x12O\n\x0c\x44\x65registerQA\x12\x1e.lba2pba.FMDeregisterQARequest\x1a\x1f.lba2pba.FMDeregisterQAResponse\x12\x42\n\tCreatePvc\x12\x19.lba2pba.CreatePvcRequest\x1a\x1a.lba2pba.CreatePvcResponse\x12\x42\n\tDeletePvc\x12\x19.lba2pba.DeletePvcRequest\x1a\x1a.lba2pba.DeletePvcResponse\x12I\n\nGetFileMap\x12\x1c.lba2pba.FMGetFileMapRequest\x1a\x1d.lba2pba.FMGetFileMapResponse\x12@\n\x07PushPba\x12\x19.lba2pba.FMPushPbaRequest\x1a\x1a.lba2pba.FMPushPbaResponse2\xa1\x02\n\x05Trace\x12@\n\x0bTChangeFile\x12\x17.lba2pba.TChangeRequest\x1a\x18.lba2pba.TChangeResponse\x12H\n\x0bTGetFileMap\x12\x1b.lba2pba.TGetFileMapRequest\x1a\x1c.lba2pba.TGetFileMapResponse\x12\x42\n\tTRegister\x12\x19.lba2pba.TRegisterRequest\x1a\x1a.lba2pba.TRegisterResponse\x12H\n\x0bTDeregister\x12\x1b.lba2pba.TDeregisterRequest\x1a\x1c.lba2pba.TDeregisterResponse2@\n\x06Worker\x12\x36\n\x05WInit\x12\x15.lba2pba.WInitRequest\x1a\x16.lba2pba.WInitResponseb\x06proto3')
 
-_globals = globals()
-_builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
-_builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'lba2pba_pb2', _globals)
+
+
+_PBA = DESCRIPTOR.message_types_by_name['PBA']
+_REPLICAPBA = DESCRIPTOR.message_types_by_name['ReplicaPba']
+_FILEPBA = DESCRIPTOR.message_types_by_name['FilePBA']
+_FILEMAP = DESCRIPTOR.message_types_by_name['FileMap']
+_WINITREQUEST = DESCRIPTOR.message_types_by_name['WInitRequest']
+_WINITRESPONSE = DESCRIPTOR.message_types_by_name['WInitResponse']
+_TGETFILEMAPREQUEST = DESCRIPTOR.message_types_by_name['TGetFileMapRequest']
+_TGETFILEMAPRESPONSE = DESCRIPTOR.message_types_by_name['TGetFileMapResponse']
+_TCHANGEREQUEST = DESCRIPTOR.message_types_by_name['TChangeRequest']
+_TCHANGERESPONSE = DESCRIPTOR.message_types_by_name['TChangeResponse']
+_TREGISTERREQUEST = DESCRIPTOR.message_types_by_name['TRegisterRequest']
+_TREGISTERRESPONSE = DESCRIPTOR.message_types_by_name['TRegisterResponse']
+_TDEREGISTERREQUEST = DESCRIPTOR.message_types_by_name['TDeregisterRequest']
+_TDEREGISTERRESPONSE = DESCRIPTOR.message_types_by_name['TDeregisterResponse']
+_FAGETPBAREQUEST = DESCRIPTOR.message_types_by_name['FAGetPbaRequest']
+_FAGETPBAREQUEST_REQUEST = _FAGETPBAREQUEST.nested_types_by_name['Request']
+_FAGETPBARESPONSE = DESCRIPTOR.message_types_by_name['FAGetPbaResponse']
+_FAPUSHREQUEST = DESCRIPTOR.message_types_by_name['FAPushRequest']
+_FMREGISTERQAREQUEST = DESCRIPTOR.message_types_by_name['FMRegisterQARequest']
+_FMREGISTERQARESPONSE = DESCRIPTOR.message_types_by_name['FMRegisterQAResponse']
+_FMDEREGISTERQAREQUEST = DESCRIPTOR.message_types_by_name['FMDeregisterQARequest']
+_FMDEREGISTERQARESPONSE = DESCRIPTOR.message_types_by_name['FMDeregisterQAResponse']
+_FAPUSHRESPONSE = DESCRIPTOR.message_types_by_name['FAPushResponse']
+_FMGETFILEMAPREQUEST = DESCRIPTOR.message_types_by_name['FMGetFileMapRequest']
+_FMGETFILEMAPRESPONSE = DESCRIPTOR.message_types_by_name['FMGetFileMapResponse']
+_FMPUSHPBAREQUEST = DESCRIPTOR.message_types_by_name['FMPushPbaRequest']
+_FMPUSHPBARESPONSE = DESCRIPTOR.message_types_by_name['FMPushPbaResponse']
+_CREATEPVCREQUEST = DESCRIPTOR.message_types_by_name['CreatePvcRequest']
+_CREATEPVCRESPONSE = DESCRIPTOR.message_types_by_name['CreatePvcResponse']
+_DELETEPVCREQUEST = DESCRIPTOR.message_types_by_name['DeletePvcRequest']
+_DELETEPVCRESPONSE = DESCRIPTOR.message_types_by_name['DeletePvcResponse']
+PBA = _reflection.GeneratedProtocolMessageType('PBA', (_message.Message,), {
+  'DESCRIPTOR' : _PBA,
+  '__module__' : 'lba2pba_pb2'
+  # @@protoc_insertion_point(class_scope:lba2pba.PBA)
+  })
+_sym_db.RegisterMessage(PBA)
+
+ReplicaPba = _reflection.GeneratedProtocolMessageType('ReplicaPba', (_message.Message,), {
+  'DESCRIPTOR' : _REPLICAPBA,
+  '__module__' : 'lba2pba_pb2'
+  # @@protoc_insertion_point(class_scope:lba2pba.ReplicaPba)
+  })
+_sym_db.RegisterMessage(ReplicaPba)
+
+FilePBA = _reflection.GeneratedProtocolMessageType('FilePBA', (_message.Message,), {
+  'DESCRIPTOR' : _FILEPBA,
+  '__module__' : 'lba2pba_pb2'
+  # @@protoc_insertion_point(class_scope:lba2pba.FilePBA)
+  })
+_sym_db.RegisterMessage(FilePBA)
+
+FileMap = _reflection.GeneratedProtocolMessageType('FileMap', (_message.Message,), {
+  'DESCRIPTOR' : _FILEMAP,
+  '__module__' : 'lba2pba_pb2'
+  # @@protoc_insertion_point(class_scope:lba2pba.FileMap)
+  })
+_sym_db.RegisterMessage(FileMap)
+
+WInitRequest = _reflection.GeneratedProtocolMessageType('WInitRequest', (_message.Message,), {
+  'DESCRIPTOR' : _WINITREQUEST,
+  '__module__' : 'lba2pba_pb2'
+  # @@protoc_insertion_point(class_scope:lba2pba.WInitRequest)
+  })
+_sym_db.RegisterMessage(WInitRequest)
+
+WInitResponse = _reflection.GeneratedProtocolMessageType('WInitResponse', (_message.Message,), {
+  'DESCRIPTOR' : _WINITRESPONSE,
+  '__module__' : 'lba2pba_pb2'
+  # @@protoc_insertion_point(class_scope:lba2pba.WInitResponse)
+  })
+_sym_db.RegisterMessage(WInitResponse)
+
+TGetFileMapRequest = _reflection.GeneratedProtocolMessageType('TGetFileMapRequest', (_message.Message,), {
+  'DESCRIPTOR' : _TGETFILEMAPREQUEST,
+  '__module__' : 'lba2pba_pb2'
+  # @@protoc_insertion_point(class_scope:lba2pba.TGetFileMapRequest)
+  })
+_sym_db.RegisterMessage(TGetFileMapRequest)
+
+TGetFileMapResponse = _reflection.GeneratedProtocolMessageType('TGetFileMapResponse', (_message.Message,), {
+  'DESCRIPTOR' : _TGETFILEMAPRESPONSE,
+  '__module__' : 'lba2pba_pb2'
+  # @@protoc_insertion_point(class_scope:lba2pba.TGetFileMapResponse)
+  })
+_sym_db.RegisterMessage(TGetFileMapResponse)
+
+TChangeRequest = _reflection.GeneratedProtocolMessageType('TChangeRequest', (_message.Message,), {
+  'DESCRIPTOR' : _TCHANGEREQUEST,
+  '__module__' : 'lba2pba_pb2'
+  # @@protoc_insertion_point(class_scope:lba2pba.TChangeRequest)
+  })
+_sym_db.RegisterMessage(TChangeRequest)
+
+TChangeResponse = _reflection.GeneratedProtocolMessageType('TChangeResponse', (_message.Message,), {
+  'DESCRIPTOR' : _TCHANGERESPONSE,
+  '__module__' : 'lba2pba_pb2'
+  # @@protoc_insertion_point(class_scope:lba2pba.TChangeResponse)
+  })
+_sym_db.RegisterMessage(TChangeResponse)
+
+TRegisterRequest = _reflection.GeneratedProtocolMessageType('TRegisterRequest', (_message.Message,), {
+  'DESCRIPTOR' : _TREGISTERREQUEST,
+  '__module__' : 'lba2pba_pb2'
+  # @@protoc_insertion_point(class_scope:lba2pba.TRegisterRequest)
+  })
+_sym_db.RegisterMessage(TRegisterRequest)
+
+TRegisterResponse = _reflection.GeneratedProtocolMessageType('TRegisterResponse', (_message.Message,), {
+  'DESCRIPTOR' : _TREGISTERRESPONSE,
+  '__module__' : 'lba2pba_pb2'
+  # @@protoc_insertion_point(class_scope:lba2pba.TRegisterResponse)
+  })
+_sym_db.RegisterMessage(TRegisterResponse)
+
+TDeregisterRequest = _reflection.GeneratedProtocolMessageType('TDeregisterRequest', (_message.Message,), {
+  'DESCRIPTOR' : _TDEREGISTERREQUEST,
+  '__module__' : 'lba2pba_pb2'
+  # @@protoc_insertion_point(class_scope:lba2pba.TDeregisterRequest)
+  })
+_sym_db.RegisterMessage(TDeregisterRequest)
+
+TDeregisterResponse = _reflection.GeneratedProtocolMessageType('TDeregisterResponse', (_message.Message,), {
+  'DESCRIPTOR' : _TDEREGISTERRESPONSE,
+  '__module__' : 'lba2pba_pb2'
+  # @@protoc_insertion_point(class_scope:lba2pba.TDeregisterResponse)
+  })
+_sym_db.RegisterMessage(TDeregisterResponse)
+
+FAGetPbaRequest = _reflection.GeneratedProtocolMessageType('FAGetPbaRequest', (_message.Message,), {
+
+  'Request' : _reflection.GeneratedProtocolMessageType('Request', (_message.Message,), {
+    'DESCRIPTOR' : _FAGETPBAREQUEST_REQUEST,
+    '__module__' : 'lba2pba_pb2'
+    # @@protoc_insertion_point(class_scope:lba2pba.FAGetPbaRequest.Request)
+    })
+  ,
+  'DESCRIPTOR' : _FAGETPBAREQUEST,
+  '__module__' : 'lba2pba_pb2'
+  # @@protoc_insertion_point(class_scope:lba2pba.FAGetPbaRequest)
+  })
+_sym_db.RegisterMessage(FAGetPbaRequest)
+_sym_db.RegisterMessage(FAGetPbaRequest.Request)
+
+FAGetPbaResponse = _reflection.GeneratedProtocolMessageType('FAGetPbaResponse', (_message.Message,), {
+  'DESCRIPTOR' : _FAGETPBARESPONSE,
+  '__module__' : 'lba2pba_pb2'
+  # @@protoc_insertion_point(class_scope:lba2pba.FAGetPbaResponse)
+  })
+_sym_db.RegisterMessage(FAGetPbaResponse)
+
+FAPushRequest = _reflection.GeneratedProtocolMessageType('FAPushRequest', (_message.Message,), {
+  'DESCRIPTOR' : _FAPUSHREQUEST,
+  '__module__' : 'lba2pba_pb2'
+  # @@protoc_insertion_point(class_scope:lba2pba.FAPushRequest)
+  })
+_sym_db.RegisterMessage(FAPushRequest)
+
+FMRegisterQARequest = _reflection.GeneratedProtocolMessageType('FMRegisterQARequest', (_message.Message,), {
+  'DESCRIPTOR' : _FMREGISTERQAREQUEST,
+  '__module__' : 'lba2pba_pb2'
+  # @@protoc_insertion_point(class_scope:lba2pba.FMRegisterQARequest)
+  })
+_sym_db.RegisterMessage(FMRegisterQARequest)
+
+FMRegisterQAResponse = _reflection.GeneratedProtocolMessageType('FMRegisterQAResponse', (_message.Message,), {
+  'DESCRIPTOR' : _FMREGISTERQARESPONSE,
+  '__module__' : 'lba2pba_pb2'
+  # @@protoc_insertion_point(class_scope:lba2pba.FMRegisterQAResponse)
+  })
+_sym_db.RegisterMessage(FMRegisterQAResponse)
+
+FMDeregisterQARequest = _reflection.GeneratedProtocolMessageType('FMDeregisterQARequest', (_message.Message,), {
+  'DESCRIPTOR' : _FMDEREGISTERQAREQUEST,
+  '__module__' : 'lba2pba_pb2'
+  # @@protoc_insertion_point(class_scope:lba2pba.FMDeregisterQARequest)
+  })
+_sym_db.RegisterMessage(FMDeregisterQARequest)
+
+FMDeregisterQAResponse = _reflection.GeneratedProtocolMessageType('FMDeregisterQAResponse', (_message.Message,), {
+  'DESCRIPTOR' : _FMDEREGISTERQARESPONSE,
+  '__module__' : 'lba2pba_pb2'
+  # @@protoc_insertion_point(class_scope:lba2pba.FMDeregisterQAResponse)
+  })
+_sym_db.RegisterMessage(FMDeregisterQAResponse)
+
+FAPushResponse = _reflection.GeneratedProtocolMessageType('FAPushResponse', (_message.Message,), {
+  'DESCRIPTOR' : _FAPUSHRESPONSE,
+  '__module__' : 'lba2pba_pb2'
+  # @@protoc_insertion_point(class_scope:lba2pba.FAPushResponse)
+  })
+_sym_db.RegisterMessage(FAPushResponse)
+
+FMGetFileMapRequest = _reflection.GeneratedProtocolMessageType('FMGetFileMapRequest', (_message.Message,), {
+  'DESCRIPTOR' : _FMGETFILEMAPREQUEST,
+  '__module__' : 'lba2pba_pb2'
+  # @@protoc_insertion_point(class_scope:lba2pba.FMGetFileMapRequest)
+  })
+_sym_db.RegisterMessage(FMGetFileMapRequest)
+
+FMGetFileMapResponse = _reflection.GeneratedProtocolMessageType('FMGetFileMapResponse', (_message.Message,), {
+  'DESCRIPTOR' : _FMGETFILEMAPRESPONSE,
+  '__module__' : 'lba2pba_pb2'
+  # @@protoc_insertion_point(class_scope:lba2pba.FMGetFileMapResponse)
+  })
+_sym_db.RegisterMessage(FMGetFileMapResponse)
+
+FMPushPbaRequest = _reflection.GeneratedProtocolMessageType('FMPushPbaRequest', (_message.Message,), {
+  'DESCRIPTOR' : _FMPUSHPBAREQUEST,
+  '__module__' : 'lba2pba_pb2'
+  # @@protoc_insertion_point(class_scope:lba2pba.FMPushPbaRequest)
+  })
+_sym_db.RegisterMessage(FMPushPbaRequest)
+
+FMPushPbaResponse = _reflection.GeneratedProtocolMessageType('FMPushPbaResponse', (_message.Message,), {
+  'DESCRIPTOR' : _FMPUSHPBARESPONSE,
+  '__module__' : 'lba2pba_pb2'
+  # @@protoc_insertion_point(class_scope:lba2pba.FMPushPbaResponse)
+  })
+_sym_db.RegisterMessage(FMPushPbaResponse)
+
+CreatePvcRequest = _reflection.GeneratedProtocolMessageType('CreatePvcRequest', (_message.Message,), {
+  'DESCRIPTOR' : _CREATEPVCREQUEST,
+  '__module__' : 'lba2pba_pb2'
+  # @@protoc_insertion_point(class_scope:lba2pba.CreatePvcRequest)
+  })
+_sym_db.RegisterMessage(CreatePvcRequest)
+
+CreatePvcResponse = _reflection.GeneratedProtocolMessageType('CreatePvcResponse', (_message.Message,), {
+  'DESCRIPTOR' : _CREATEPVCRESPONSE,
+  '__module__' : 'lba2pba_pb2'
+  # @@protoc_insertion_point(class_scope:lba2pba.CreatePvcResponse)
+  })
+_sym_db.RegisterMessage(CreatePvcResponse)
+
+DeletePvcRequest = _reflection.GeneratedProtocolMessageType('DeletePvcRequest', (_message.Message,), {
+  'DESCRIPTOR' : _DELETEPVCREQUEST,
+  '__module__' : 'lba2pba_pb2'
+  # @@protoc_insertion_point(class_scope:lba2pba.DeletePvcRequest)
+  })
+_sym_db.RegisterMessage(DeletePvcRequest)
+
+DeletePvcResponse = _reflection.GeneratedProtocolMessageType('DeletePvcResponse', (_message.Message,), {
+  'DESCRIPTOR' : _DELETEPVCRESPONSE,
+  '__module__' : 'lba2pba_pb2'
+  # @@protoc_insertion_point(class_scope:lba2pba.DeletePvcResponse)
+  })
+_sym_db.RegisterMessage(DeletePvcResponse)
+
+_DBFILEAGENT = DESCRIPTOR.services_by_name['DBFileAgent']
+_DBFILEMANAGER = DESCRIPTOR.services_by_name['DBFileManager']
+_TRACE = DESCRIPTOR.services_by_name['Trace']
+_WORKER = DESCRIPTOR.services_by_name['Worker']
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
-  _globals['_PBA']._serialized_start=26
-  _globals['_PBA']._serialized_end=121
-  _globals['_REPLICAPBA']._serialized_start=123
-  _globals['_REPLICAPBA']._serialized_end=176
-  _globals['_FILEPBA']._serialized_start=178
-  _globals['_FILEPBA']._serialized_end=281
-  _globals['_FILEMAP']._serialized_start=283
-  _globals['_FILEMAP']._serialized_end=327
-  _globals['_VSHARD']._serialized_start=329
-  _globals['_VSHARD']._serialized_end=444
-  _globals['_VSHARD_FSHARD']._serialized_start=399
-  _globals['_VSHARD_FSHARD']._serialized_end=444
-  _globals['_WGETSHARDREQUEST']._serialized_start=446
-  _globals['_WGETSHARDREQUEST']._serialized_end=481
-  _globals['_WGETSHARDRESPONSE']._serialized_start=483
-  _globals['_WGETSHARDRESPONSE']._serialized_end=539
-  _globals['_WGETPBAREQUEST']._serialized_start=541
-  _globals['_WGETPBAREQUEST']._serialized_end=575
-  _globals['_WGETPBARESPONSE']._serialized_start=578
-  _globals['_WGETPBARESPONSE']._serialized_end=741
-  _globals['_WGETPBARESPONSE_DATA']._serialized_start=673
-  _globals['_WGETPBARESPONSE_DATA']._serialized_end=741
-  _globals['_TGETPBAREQUEST']._serialized_start=743
-  _globals['_TGETPBAREQUEST']._serialized_end=794
-  _globals['_TGETPBARESPONSE']._serialized_start=796
-  _globals['_TGETPBARESPONSE']._serialized_end=875
-  _globals['_CREATEPVCREQUEST']._serialized_start=877
-  _globals['_CREATEPVCREQUEST']._serialized_end=948
-  _globals['_CREATEPVCRESPONSE']._serialized_start=950
-  _globals['_CREATEPVCRESPONSE']._serialized_end=999
-  _globals['_DELETEPVCREQUEST']._serialized_start=1001
-  _globals['_DELETEPVCREQUEST']._serialized_end=1036
-  _globals['_DELETEPVCRESPONSE']._serialized_start=1038
-  _globals['_DELETEPVCRESPONSE']._serialized_end=1087
-  _globals['_GETFMREQUEST']._serialized_start=1089
-  _globals['_GETFMREQUEST']._serialized_end=1133
-  _globals['_GETFMRESPONSE']._serialized_start=1135
-  _globals['_GETFMRESPONSE']._serialized_end=1185
-  _globals['_UPDATEFMREQUEST']._serialized_start=1187
-  _globals['_UPDATEFMREQUEST']._serialized_end=1234
-  _globals['_UPDATEFMRESPONSE']._serialized_start=1236
-  _globals['_UPDATEFMRESPONSE']._serialized_end=1289
-  _globals['_QGETPBAREQUEST']._serialized_start=1292
-  _globals['_QGETPBAREQUEST']._serialized_end=1420
-  _globals['_QGETPBAREQUEST_REQUEST']._serialized_start=1361
-  _globals['_QGETPBAREQUEST_REQUEST']._serialized_end=1420
-  _globals['_QGETPBARESPONSE']._serialized_start=1422
-  _globals['_QGETPBARESPONSE']._serialized_end=1474
-  _globals['_QUERYAGENT']._serialized_start=1476
-  _globals['_QUERYAGENT']._serialized_end=1549
-  _globals['_MANAGER']._serialized_start=1552
-  _globals['_MANAGER']._serialized_end=1818
-  _globals['_TRACE']._serialized_start=1820
-  _globals['_TRACE']._serialized_end=1885
-  _globals['_WORKER']._serialized_start=1888
-  _globals['_WORKER']._serialized_end=2025
+  _PBA._serialized_start=26
+  _PBA._serialized_end=121
+  _REPLICAPBA._serialized_start=123
+  _REPLICAPBA._serialized_end=176
+  _FILEPBA._serialized_start=178
+  _FILEPBA._serialized_end=298
+  _FILEMAP._serialized_start=300
+  _FILEMAP._serialized_end=344
+  _WINITREQUEST._serialized_start=346
+  _WINITREQUEST._serialized_end=376
+  _WINITRESPONSE._serialized_start=378
+  _WINITRESPONSE._serialized_end=428
+  _TGETFILEMAPREQUEST._serialized_start=430
+  _TGETFILEMAPREQUEST._serialized_end=466
+  _TGETFILEMAPRESPONSE._serialized_start=468
+  _TGETFILEMAPRESPONSE._serialized_end=524
+  _TCHANGEREQUEST._serialized_start=526
+  _TCHANGEREQUEST._serialized_end=593
+  _TCHANGERESPONSE._serialized_start=595
+  _TCHANGERESPONSE._serialized_end=625
+  _TREGISTERREQUEST._serialized_start=627
+  _TREGISTERREQUEST._serialized_end=659
+  _TREGISTERRESPONSE._serialized_start=661
+  _TREGISTERRESPONSE._serialized_end=693
+  _TDEREGISTERREQUEST._serialized_start=695
+  _TDEREGISTERREQUEST._serialized_end=729
+  _TDEREGISTERRESPONSE._serialized_start=731
+  _TDEREGISTERRESPONSE._serialized_end=765
+  _FAGETPBAREQUEST._serialized_start=768
+  _FAGETPBAREQUEST._serialized_end=898
+  _FAGETPBAREQUEST_REQUEST._serialized_start=839
+  _FAGETPBAREQUEST_REQUEST._serialized_end=898
+  _FAGETPBARESPONSE._serialized_start=900
+  _FAGETPBARESPONSE._serialized_end=953
+  _FAPUSHREQUEST._serialized_start=955
+  _FAPUSHREQUEST._serialized_end=1021
+  _FMREGISTERQAREQUEST._serialized_start=1023
+  _FMREGISTERQAREQUEST._serialized_end=1058
+  _FMREGISTERQARESPONSE._serialized_start=1060
+  _FMREGISTERQARESPONSE._serialized_end=1095
+  _FMDEREGISTERQAREQUEST._serialized_start=1097
+  _FMDEREGISTERQAREQUEST._serialized_end=1134
+  _FMDEREGISTERQARESPONSE._serialized_start=1136
+  _FMDEREGISTERQARESPONSE._serialized_end=1173
+  _FAPUSHRESPONSE._serialized_start=1175
+  _FAPUSHRESPONSE._serialized_end=1220
+  _FMGETFILEMAPREQUEST._serialized_start=1222
+  _FMGETFILEMAPREQUEST._serialized_end=1273
+  _FMGETFILEMAPRESPONSE._serialized_start=1275
+  _FMGETFILEMAPRESPONSE._serialized_end=1332
+  _FMPUSHPBAREQUEST._serialized_start=1334
+  _FMPUSHPBAREQUEST._serialized_end=1403
+  _FMPUSHPBARESPONSE._serialized_start=1405
+  _FMPUSHPBARESPONSE._serialized_end=1453
+  _CREATEPVCREQUEST._serialized_start=1455
+  _CREATEPVCREQUEST._serialized_end=1526
+  _CREATEPVCRESPONSE._serialized_start=1528
+  _CREATEPVCRESPONSE._serialized_end=1577
+  _DELETEPVCREQUEST._serialized_start=1579
+  _DELETEPVCREQUEST._serialized_end=1614
+  _DELETEPVCRESPONSE._serialized_start=1616
+  _DELETEPVCRESPONSE._serialized_end=1665
+  _DBFILEAGENT._serialized_start=1668
+  _DBFILEAGENT._serialized_end=1805
+  _DBFILEMANAGER._serialized_start=1808
+  _DBFILEMANAGER._serialized_end=2256
+  _TRACE._serialized_start=2259
+  _TRACE._serialized_end=2548
+  _WORKER._serialized_start=2550
+  _WORKER._serialized_end=2614
 # @@protoc_insertion_point(module_scope)

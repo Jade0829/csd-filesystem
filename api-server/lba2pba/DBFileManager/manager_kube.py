@@ -32,5 +32,25 @@ def GetSubDir(PvcName):
 	subDir = subDir.replace("\n","")
 	volName = volName.replace("\n","")
 
-	return subDir, volName
-	
+	return subDir, volName	
+
+def GetPVCInfo():
+    pvcCmd = "kubectl get pvc | awk 'NR>=2 {print $1}'"
+    info = {}
+
+    err, res = subprocess.getstatusoutput(pvcCmd)
+    if err == 0:
+        pvcList = res.split('\n')
+
+        for pvc in pvcList:
+            data = {}
+            subDir, volName = GetSubDir(pvc)
+            data['subDir'] = subDir
+            data['volName'] = volName
+
+            info[pvc] = data
+
+        return 0, info
+
+    else:
+        return 1, res

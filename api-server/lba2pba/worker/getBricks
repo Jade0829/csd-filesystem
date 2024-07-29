@@ -1,0 +1,40 @@
+#!/bin/perl
+
+use Getopt::Long;
+
+my $opt_n;
+
+my $volName = '';
+
+GetOptions('n=s' => \$opt_n) or die "Ussage : getBricks -n volume_name\n";
+#getopts('n');
+
+if (defined $opt_n) {
+	my $volumes_out = `gluster volume list | grep $opt_n`;
+	#my $volumes_out = `gluster volume list | grep rep`;
+
+	my @volumes = split(/\n/,$volumes_out);
+
+	my $hostname = `hostname`;
+
+	my $hostIP = `hostname -i`;
+
+
+	foreach my $volume (@volumes){
+		my $brick_out =`gluster volume status $volume | grep $hostname`;
+
+
+		my @bricks = split(/\n/,$brick_out);
+
+		foreach my $__brick (@bricks){
+			my @_brick = split(/\s+/,$__brick);
+			my @_brick = split(/:/,$_brick[1]);
+			my $brick = $_brick[1];
+
+			print "$volume $brick $hostIP";
+		}
+	}
+}else{
+	print "Option -n is not set or has no argument\n";
+	print "Usage : getBricks -n volume_name\n";
+}

@@ -2,145 +2,177 @@ syntax="proto3";
 
 package lba2pba;
 
-service QueryAgent{
-	rpc GetPba (QGetPbaRequest) returns (QGetPbaResponse);
+service DBFileAgent{
+	rpc GetPba (FAGetPbaRequest) returns (FAGetPbaResponse);
+	rpc PushFile (FAPushRequest) returns (FAPushResponse);
 }
 
-service Manager{
+service DBFileManager{
+	rpc RegisterQA (FMRegisterQARequest) returns (FMRegisterQAResponse);
+	rpc DeregisterQA (FMDeregisterQARequest) returns (FMDeregisterQAResponse);
 	rpc CreatePvc (CreatePvcRequest) returns (CreatePvcResponse);
 	rpc DeletePvc (DeletePvcRequest) returns (DeletePvcResponse);
-	rpc GetFM (GetFMRequest) returns (GetFMResponse);
-	rpc UpdateFM (UpdateFMRequest) returns (UpdateFMResponse);
+	rpc GetFileMap (FMGetFileMapRequest) returns (FMGetFileMapResponse);
+	rpc PushPba (FMPushPbaRequest) returns (FMPushPbaResponse);
 }
 
 service Trace{
-	rpc Get (TGetPbaRequest) returns (TGetPbaResponse);
+	rpc TChangeFile (TChangeRequest) returns (TChangeResponse);
+	rpc TGetFileMap(TGetFileMapRequest) returns (TGetFileMapResponse);
+	rpc TRegister(TRegisterRequest) returns (TRegisterResponse);
+	rpc TDeregister(TDeregisterRequest) returns (TDeregisterResponse);
 }
 
+
 service Worker{
-	rpc Get (WGetPbaRequest) returns (WGetPbaResponse);
-	rpc GetShardList (WGetShardRequest) returns (WGetShardResponse);
+	rpc WInit(WInitRequest) returns (WInitResponse);
 }
 
 message PBA{
-    string Disk = 1;
-    string Host = 2;
-    int64 Offset = 3;
-    int64 Length = 4;
-    int64 Major = 5;
-    int64 Minor = 6;
+    string disk = 1;
+    string host = 2;
+    int64 offset = 3;
+    int64 length = 4;
+    int64 major = 5;
+    int64 minor = 6;
 }
 
 message ReplicaPba{
-	repeated PBA Pba = 1;
+	repeated PBA pba = 1;
 	string Node = 2;
 }
 
 message FilePBA{
-	repeated PBA Pba = 1;
+	repeated PBA pba = 1;
 	repeated ReplicaPba rPba = 2;
-	string FileName = 3;
-	string Type = 4;
+	string fileName = 3;
+	string volName = 4;
+	string type = 5;
 }
 
 
 message FileMap {
-    repeated FilePBA FilePba = 1;
+    repeated FilePBA filePba = 1;
 }
 
-message VShard{
-	message FShard{
-		string FileName = 1;
-		repeated string shardList = 2;
+message WInitRequest{
+	string signal = 1;
+}
+
+message WInitResponse{
+	repeated FilePBA filePba = 1;
+}
+
+message TGetFileMapRequest{
+	string signal = 1;
+}
+
+message TGetFileMapResponse{
+	FileMap fileMap = 1;
+}
+
+message TChangeRequest{
+	string action = 1;
+	FilePBA filePba = 2;
+}
+
+message TChangeResponse{
+	string res = 1;
+}
+
+message TRegisterRequest{
+	string addr = 1;
+}
+
+message TRegisterResponse{
+	string res = 1;
+}
+
+message TDeregisterRequest{
+	string addr = 1;
+}
+
+message TDeregisterResponse{
+	string res = 1;
+}
+
+message FAGetPbaRequest{
+	message Request{
+		string fileName = 1;
+		int64 offset = 2;
+		int64 length = 3;
 	}
-	string VolName = 1;
-	string Type = 2;
-	repeated FShard ShardList = 3;
+
+	repeated Request requests = 1;
 }
 
-message WGetShardRequest{
-	string VolName = 1;
+message FAGetPbaResponse{
+	repeated FilePBA filePba = 1;
 }
 
-message WGetShardResponse{
-	repeated VShard vShardList = 1;
+message FAPushRequest{
+	string action = 1;
+	FilePBA filePba = 2;
 }
 
-message WGetPbaRequest{
-	string FileName = 1;
+message FMRegisterQARequest{
+	string addr = 1;
 }
 
-message WGetPbaResponse{
-	message Data{
-		int64 Major = 1;
-		int64 Minor = 2;
-		int64 Offset = 3;
-		int64 Length = 4;
-	}
-	
-	repeated Data Pba = 1;
-	string Disk = 2;
-	string FileName = 3;
+message FMRegisterQAResponse{
+	string res = 1;
 }
 
-message TGetPbaRequest{
-	string FileName = 1;
-	string VolName = 2;
+message FMDeregisterQARequest{
+	string addr = 1;
 }
 
-message TGetPbaResponse{
-	repeated PBA Pba = 1;
-	repeated ReplicaPba RPba = 2;
+message FMDeregisterQAResponse{
+	string res = 1;
+}
+
+message FAPushResponse{
+	string msg = 1;
+	string status = 2;
+}
+
+message FMGetFileMapRequest{
+	string ip = 1;
+	repeated string fileList = 2;
+}
+
+message FMGetFileMapResponse{
+	FileMap fileMap = 1;
+}
+
+message FMPushPbaRequest{
+	string action = 1;	
+	FilePBA filePba = 2;
+}
+
+message FMPushPbaResponse{
+	string msg = 1;
+	string status = 2;
 }
 
 message CreatePvcRequest{
-	string PvcName = 1;
-	string PvcType = 2;
-	string DupliType = 3;
+	string pvcName = 1;
+	string pvcType = 2;
+	string dupliType = 3;
 }
 
 message CreatePvcResponse{
-	string Msg = 1;
-	string PvcName = 2;
+	string msg = 1;
+	string pvcName = 2;
 }
 
 message DeletePvcRequest{
-	string PvcName = 1;
+	string pvcName = 1;
 }
 
 message DeletePvcResponse{
-	string Msg = 1;
-	string PvcName =2;
+	string msg = 1;
+	string pvcName =2;
 }
 
-message GetFMRequest{
-	string Ip = 1;
-	repeated string FileList = 2;
-}
 
-message GetFMResponse{
-	FileMap FileMap = 1;
-}
-
-message UpdateFMRequest{
-	string Ip = 1;
-	repeated string FileList = 2;		
-}
-
-message UpdateFMResponse{
-	FileMap FileMap = 1;
-}
-
-message QGetPbaRequest{
-	message Request{
-		string FileName = 1;
-		int64 Offset = 2;
-		int64 Length = 3;
-	}
-	
-	repeated Request Requests = 1;
-}
-
-message QGetPbaResponse{
-	repeated FilePBA FilePba = 1;
-}

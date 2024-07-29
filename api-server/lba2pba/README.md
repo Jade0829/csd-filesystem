@@ -1,167 +1,231 @@
 LBA2PBA는 쿠버네티스에서 동작하는 파드가 사용중인 PV(Persistent Volume)에 저장된 파일들의 물리 주소를 찾아주는 소프트웨어입니다.
 
-LBA2PBA는 gRPC를 사용하며, 4개의 서비스(QueryAgent, Manager, Trace, Worker)가 있습니다.
+LBA2PBA는 gRPC를 사용하며, 4개의 서비스(DB Agent, DB File Manager, Trace, Worker)가 있습니다.
 
 
-QueryAgent
+DB Agent
 ---
-QueryAgent는 파드에 저장된 파일들의 논리 주소를 받으면 대응되는 물리 주소로 반환해주는 서비스입니다.
+DB Agent는 파드에 저장된 파일들의 논리 주소를 받으면 대응되는 물리 주소로 반환해주는 서비스입니다.
 
 ```
 # LBA2PBA.proto Code
-service QueryAgent{
-  rpc GetPba (QGetPbaRequest) returns (QGetPbaResponse);
-  rpc UpdatePba (UpdatePbaRequest) returns (UpdatePbaResponse);
+service DBFileAgent{
+	rpc GetPba (FAGetPbaRequest) returns (FAGetPbaResponse);
+	rpc PushFile (FAPushRequest) returns (FAPushResponse);
 }
 
 message PBA{
-  string Disk = 1;
-  string Host = 2;
-  int64 Offset = 3;
-  int64 Length = 4;
-  int64 Major = 5;
-  int64 Minor = 6;
+	string disk = 1;
+	string host = 2;
+	int64 offset = 3;
+	int64 length = 4;
+	int64 major = 5;
+	int64 minor = 6;
+}
+
+message ReplicaPba{
+	repeated PBA pba = 1;
+	string Node = 2;
 }
 
 message FilePBA{
-  repeated PBA Pba = 1;
-  string File_Name = 2;
+	repeated PBA Pba = 1;
+	repeated ReplicaPba rPba = 2;
+	string fileName = 3;
+	string volName = 4;
+	string type = 5;
 }
 
 message FileMap{
-  repeated FilePBA File_Pba = 1;
+	repeated FilePBA filePba = 1;
 }
 
-message QGetPbaRequest{
-  message Request{
-    string File_Name = 1;
-    int64 Offset = 2;
-    int64 Length = 3;
-  }
+message FAGetPbaRequest{
+	message Request{
+		string fileName = 1;
+	    int64 offset = 2;
+	    int64 length = 3;
+	}
   
-  repeated Request Requests = 1;
+	repeated Request requests = 1;
 }
 
-message QGetPbaResponse{
-  repeated FilePBA File_Pba = 1;
+message FAGetPbaResponse{
+	repeated FilePBA filePba = 1;
 }
 
-message UpdatePbaRequest{
-  string Ip = 1;
-  repeated string Modi_List = 2;
-  repeated string Add_list = 3;
-  repeated string Del_list = 4;
+message FAPushRequest{
+	string action = 1;
+	FilePBA filePba = 2;
 }
 
-message UpdatePbaResponse{
-  FileMap File_Map = 1;
+message FAPushResponse{
+	string msg = 1;
+	string status = 2;
 }
 ```
 
-Manager
+DB File Manager
 ---
 Manager는 QueryAgent로부터 PV에 저장된 파일 리스트 전달받아 전체 FileMap을 관리하고, PVC 생성 및 삭제 기능을 하는 서비스입니다.
 
 ```
 service Manager{
-  rpc CreatePvc (CreatePvcRequest) returns (CreatePvcResponse);
-  rpc DeletePvc (DeletePvcRequest) returns (DeletePvcResponse);
-  rpc GetFM (GetFMRequest) returns (GetFMResponse);
-  rpc UpdateFM (UpdateFMRequest) returns (UpdateFMResponse);
+	rpc RegisterQA (FMRegisterQARequest) return (FMRegisterQAResponse);
+	rpc DeregisterQA (FMDeregisterQARequest) return (FMDeregisterQAResponse);
+	rpc CreatePvc (CreatePvcRequest) returns (CreatePvcResponse);
+	rpc DeletePvc (DeletePvcRequest) returns (DeletePvcResponse);
+	rpc GetFileMap (FMGetFileMapRequest) returns (FMGetFileMapResponse);
+	rpc PsuhPba (FMPushPbaRequest) returns (FMPushPbaResponse);
 }
 
 message CreatePvcRequest{
-  string Pvc_Name = 1;
-  string Pvc_Type = 2;
-  string Dupli_Type = 3;
+	string pvcName = 1;
+	string pvcType = 2;
+	string dupliType = 3;
 }
 
 message CreatePvcResponse{
-  string Msg = 1;
-  string Pvc_Name = 2;
+	string msg = 1;
+	string pvcName = 2;
 }
 
 message DeletePvcRequest{
-  string Pvc_Name = 1;
+	string pvcName = 1;
 }
 
 message DeletePvcResponse{
-  string Msg = 1;
-  string Pvc_Name = 2;
+	string msg = 1;
+	string pvcName = 2;
 }
 
-message GetFMRequest{
-  string Ip = 1;
-  repeated string File_List = 2;
+message FMRegisterQARequest{
+	string addr = 1;
 }
 
-message GetFMResponse{
-  FileMap File_Map = 1;
+message FMRegisterQAResponse{
+	string res = 1;
 }
 
-message UpdateFMRequest{
-  string Ip = 1;
-  repeated string Modi_List = 2;
-  repeated string Add_List = 3;
-  repeated string Del_List = 4;
+message FMDeregisterQARequest{
+	string addr = 1;
 }
 
-message UpdateFMResponse{
-  FileMap File_Map = 1;
+message FMDeregisterQAResponse{
+	string res = 1;
+}
+
+message FMGetFileMapRequest{
+	string ip = 1;
+	repeated string fileList = 2;
+}
+
+message FMGetFileMapResponse{
+	FileMap fileMap = 1;
+}
+
+message FMPushPbaRequest{
+	string action = 1;
+	FilePba filePba = 2;
+}
+
+message FMPushPbaResponse{
+	string msg = 1;
+	string status = 2;
 }
 ```
 
 Trace
 ---
-Trace는 Gluster 볼륨에 저장된 파일명을 받으면 해당 파일의 Sharding 된 파일명들을 찾아 파일의 물리 주소를 순서대로 정렬하여 반환하는 서비스입니다.
+Trace는 worker가 전달해준 FilePba 정보를 가지고 FileMap을 구성합니다.
 
 ```
 service Trace{
-  rpc Get (TGetPbaRequest) returns (TGetPbaResponse);
+	rpc TChangeFile (TChangeRequest) returns (TChangeResponse);
+	rpc TGetFileMap (TGetFileMapRequest) returns (TGetFileMapResponse);
+	rpc TRegister (TRegisterRequest) returns (TRegisterResponse);
+	rpc TDeregister ( TDeregisterRequest) returns (TDeregisterResponse);
 }
 
 message PBA{
-  string Disk = 1;
-  string Host = 2;
-  int64 Offset = 3;
-  int64 Length = 4;
-  int64 Major = 5;
-  int64 Minor = 6;
+	string disk = 1;
+	string host = 2;
+	int64 offset = 3;
+	int64 length = 4;
+	int64 major = 5;
+	int64 minor = 6;
 }
 
-message TGetPbaRequest{
-  string File_Name = 1;
-  string Vol_Name = 2;
+message TChangeRequest{
+	string action = 1;
+	FilePBA filePba = 2;
 }
 
-message TGetPbaResponse{
-  repeated PBA Pba = 1;
+message TChangeResponse{
+	string res = 1;
+}
+
+message TGetFileMapRequest{
+	string signal = 1;
+}
+
+message TGetFileMapResponse{
+	FileMap fileMap = 1;
+}
+
+message TRegisterRequest{
+	string addr = 1
+}
+
+message TRegisterResponse{
+	string res = 1;
+}
+
+message TDeregisterRequest{
+	string addr = 1;
+}
+
+message TDeregisterResponse{
+	string res = 1;
 }
 ```
 
 Worker
 ---
-Worker는 파일명을 받으면 해당 파일명의 물리 주소와 길이를 반환해주는 서비스입니다.
+Worker는 gluster volume에 해당되는 brick들을 모니터링해서 물리 주소를 반환하며 주기적으로 파일 변화를 감지합니다.
 
 ```
 service Worker{
-  rpc Get (WGetPbaRequest) returns (WGetPbaResponse);
+	rpc WInit (WInitRequest) returns (WInitResponse);
 }
 
-message WGetPbaRequest{
-  string File_Name = 1;
+message PBA{
+	string disk = 1;
+	string host = 2;
+	int64 offset = 3;
+	int64 length = 4;
+	int64 major = 5;
+	int64 minor = 6;
 }
 
-message WGetPbaRequest{
-  message Data{
-    int64 Major = 1;
-    int64 Minor = 2;
-    int64 Offset = 3;
-    int64 Length = 4;
-  }
-  
-  repeated Data Pba = 1;
-  string Disk = 2;
-  string File_Name = 3;
+message ReplicaPba{
+	repeated PBA pba = 1;
+	string Node = 2;
+}
+
+message FilePBA{
+	repeated PBA pba = 1;
+	repeated ReplicaPba rPba = 2;
+	string fileName = 3;
+	string volName = 4;
+	string type = 5; 
+}
+
+message WInitRequest{
+	string signal = 1;
+}
+
+message WInitResponse{
+	repeated FilePBA filePba = 1;
 }
 ```

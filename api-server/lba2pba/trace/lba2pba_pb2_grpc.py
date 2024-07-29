@@ -5,7 +5,7 @@ import grpc
 import lba2pba_pb2 as lba2pba__pb2
 
 
-class QueryAgentStub(object):
+class DBFileAgentStub(object):
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -15,13 +15,18 @@ class QueryAgentStub(object):
             channel: A grpc.Channel.
         """
         self.GetPba = channel.unary_unary(
-                '/lba2pba.QueryAgent/GetPba',
-                request_serializer=lba2pba__pb2.QGetPbaRequest.SerializeToString,
-                response_deserializer=lba2pba__pb2.QGetPbaResponse.FromString,
+                '/lba2pba.DBFileAgent/GetPba',
+                request_serializer=lba2pba__pb2.FAGetPbaRequest.SerializeToString,
+                response_deserializer=lba2pba__pb2.FAGetPbaResponse.FromString,
+                )
+        self.PushFile = channel.unary_unary(
+                '/lba2pba.DBFileAgent/PushFile',
+                request_serializer=lba2pba__pb2.FAPushRequest.SerializeToString,
+                response_deserializer=lba2pba__pb2.FAPushResponse.FromString,
                 )
 
 
-class QueryAgentServicer(object):
+class DBFileAgentServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def GetPba(self, request, context):
@@ -30,22 +35,33 @@ class QueryAgentServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def PushFile(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
 
-def add_QueryAgentServicer_to_server(servicer, server):
+
+def add_DBFileAgentServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'GetPba': grpc.unary_unary_rpc_method_handler(
                     servicer.GetPba,
-                    request_deserializer=lba2pba__pb2.QGetPbaRequest.FromString,
-                    response_serializer=lba2pba__pb2.QGetPbaResponse.SerializeToString,
+                    request_deserializer=lba2pba__pb2.FAGetPbaRequest.FromString,
+                    response_serializer=lba2pba__pb2.FAGetPbaResponse.SerializeToString,
+            ),
+            'PushFile': grpc.unary_unary_rpc_method_handler(
+                    servicer.PushFile,
+                    request_deserializer=lba2pba__pb2.FAPushRequest.FromString,
+                    response_serializer=lba2pba__pb2.FAPushResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'lba2pba.QueryAgent', rpc_method_handlers)
+            'lba2pba.DBFileAgent', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
  # This class is part of an EXPERIMENTAL API.
-class QueryAgent(object):
+class DBFileAgent(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
@@ -59,14 +75,31 @@ class QueryAgent(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lba2pba.QueryAgent/GetPba',
-            lba2pba__pb2.QGetPbaRequest.SerializeToString,
-            lba2pba__pb2.QGetPbaResponse.FromString,
+        return grpc.experimental.unary_unary(request, target, '/lba2pba.DBFileAgent/GetPba',
+            lba2pba__pb2.FAGetPbaRequest.SerializeToString,
+            lba2pba__pb2.FAGetPbaResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def PushFile(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/lba2pba.DBFileAgent/PushFile',
+            lba2pba__pb2.FAPushRequest.SerializeToString,
+            lba2pba__pb2.FAPushResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
 
-class ManagerStub(object):
+class DBFileManagerStub(object):
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -75,30 +108,52 @@ class ManagerStub(object):
         Args:
             channel: A grpc.Channel.
         """
+        self.RegisterQA = channel.unary_unary(
+                '/lba2pba.DBFileManager/RegisterQA',
+                request_serializer=lba2pba__pb2.FMRegisterQARequest.SerializeToString,
+                response_deserializer=lba2pba__pb2.FMRegisterQAResponse.FromString,
+                )
+        self.DeregisterQA = channel.unary_unary(
+                '/lba2pba.DBFileManager/DeregisterQA',
+                request_serializer=lba2pba__pb2.FMDeregisterQARequest.SerializeToString,
+                response_deserializer=lba2pba__pb2.FMDeregisterQAResponse.FromString,
+                )
         self.CreatePvc = channel.unary_unary(
-                '/lba2pba.Manager/CreatePvc',
+                '/lba2pba.DBFileManager/CreatePvc',
                 request_serializer=lba2pba__pb2.CreatePvcRequest.SerializeToString,
                 response_deserializer=lba2pba__pb2.CreatePvcResponse.FromString,
                 )
         self.DeletePvc = channel.unary_unary(
-                '/lba2pba.Manager/DeletePvc',
+                '/lba2pba.DBFileManager/DeletePvc',
                 request_serializer=lba2pba__pb2.DeletePvcRequest.SerializeToString,
                 response_deserializer=lba2pba__pb2.DeletePvcResponse.FromString,
                 )
-        self.GetFM = channel.unary_unary(
-                '/lba2pba.Manager/GetFM',
-                request_serializer=lba2pba__pb2.GetFMRequest.SerializeToString,
-                response_deserializer=lba2pba__pb2.GetFMResponse.FromString,
+        self.GetFileMap = channel.unary_unary(
+                '/lba2pba.DBFileManager/GetFileMap',
+                request_serializer=lba2pba__pb2.FMGetFileMapRequest.SerializeToString,
+                response_deserializer=lba2pba__pb2.FMGetFileMapResponse.FromString,
                 )
-        self.UpdateFM = channel.unary_unary(
-                '/lba2pba.Manager/UpdateFM',
-                request_serializer=lba2pba__pb2.UpdateFMRequest.SerializeToString,
-                response_deserializer=lba2pba__pb2.UpdateFMResponse.FromString,
+        self.PushPba = channel.unary_unary(
+                '/lba2pba.DBFileManager/PushPba',
+                request_serializer=lba2pba__pb2.FMPushPbaRequest.SerializeToString,
+                response_deserializer=lba2pba__pb2.FMPushPbaResponse.FromString,
                 )
 
 
-class ManagerServicer(object):
+class DBFileManagerServicer(object):
     """Missing associated documentation comment in .proto file."""
+
+    def RegisterQA(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def DeregisterQA(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
 
     def CreatePvc(self, request, context):
         """Missing associated documentation comment in .proto file."""
@@ -112,21 +167,31 @@ class ManagerServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def GetFM(self, request, context):
+    def GetFileMap(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def UpdateFM(self, request, context):
+    def PushPba(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
 
-def add_ManagerServicer_to_server(servicer, server):
+def add_DBFileManagerServicer_to_server(servicer, server):
     rpc_method_handlers = {
+            'RegisterQA': grpc.unary_unary_rpc_method_handler(
+                    servicer.RegisterQA,
+                    request_deserializer=lba2pba__pb2.FMRegisterQARequest.FromString,
+                    response_serializer=lba2pba__pb2.FMRegisterQAResponse.SerializeToString,
+            ),
+            'DeregisterQA': grpc.unary_unary_rpc_method_handler(
+                    servicer.DeregisterQA,
+                    request_deserializer=lba2pba__pb2.FMDeregisterQARequest.FromString,
+                    response_serializer=lba2pba__pb2.FMDeregisterQAResponse.SerializeToString,
+            ),
             'CreatePvc': grpc.unary_unary_rpc_method_handler(
                     servicer.CreatePvc,
                     request_deserializer=lba2pba__pb2.CreatePvcRequest.FromString,
@@ -137,25 +202,59 @@ def add_ManagerServicer_to_server(servicer, server):
                     request_deserializer=lba2pba__pb2.DeletePvcRequest.FromString,
                     response_serializer=lba2pba__pb2.DeletePvcResponse.SerializeToString,
             ),
-            'GetFM': grpc.unary_unary_rpc_method_handler(
-                    servicer.GetFM,
-                    request_deserializer=lba2pba__pb2.GetFMRequest.FromString,
-                    response_serializer=lba2pba__pb2.GetFMResponse.SerializeToString,
+            'GetFileMap': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetFileMap,
+                    request_deserializer=lba2pba__pb2.FMGetFileMapRequest.FromString,
+                    response_serializer=lba2pba__pb2.FMGetFileMapResponse.SerializeToString,
             ),
-            'UpdateFM': grpc.unary_unary_rpc_method_handler(
-                    servicer.UpdateFM,
-                    request_deserializer=lba2pba__pb2.UpdateFMRequest.FromString,
-                    response_serializer=lba2pba__pb2.UpdateFMResponse.SerializeToString,
+            'PushPba': grpc.unary_unary_rpc_method_handler(
+                    servicer.PushPba,
+                    request_deserializer=lba2pba__pb2.FMPushPbaRequest.FromString,
+                    response_serializer=lba2pba__pb2.FMPushPbaResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'lba2pba.Manager', rpc_method_handlers)
+            'lba2pba.DBFileManager', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
  # This class is part of an EXPERIMENTAL API.
-class Manager(object):
+class DBFileManager(object):
     """Missing associated documentation comment in .proto file."""
+
+    @staticmethod
+    def RegisterQA(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/lba2pba.DBFileManager/RegisterQA',
+            lba2pba__pb2.FMRegisterQARequest.SerializeToString,
+            lba2pba__pb2.FMRegisterQAResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def DeregisterQA(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/lba2pba.DBFileManager/DeregisterQA',
+            lba2pba__pb2.FMDeregisterQARequest.SerializeToString,
+            lba2pba__pb2.FMDeregisterQAResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
     def CreatePvc(request,
@@ -168,7 +267,7 @@ class Manager(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lba2pba.Manager/CreatePvc',
+        return grpc.experimental.unary_unary(request, target, '/lba2pba.DBFileManager/CreatePvc',
             lba2pba__pb2.CreatePvcRequest.SerializeToString,
             lba2pba__pb2.CreatePvcResponse.FromString,
             options, channel_credentials,
@@ -185,14 +284,14 @@ class Manager(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lba2pba.Manager/DeletePvc',
+        return grpc.experimental.unary_unary(request, target, '/lba2pba.DBFileManager/DeletePvc',
             lba2pba__pb2.DeletePvcRequest.SerializeToString,
             lba2pba__pb2.DeletePvcResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def GetFM(request,
+    def GetFileMap(request,
             target,
             options=(),
             channel_credentials=None,
@@ -202,14 +301,14 @@ class Manager(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lba2pba.Manager/GetFM',
-            lba2pba__pb2.GetFMRequest.SerializeToString,
-            lba2pba__pb2.GetFMResponse.FromString,
+        return grpc.experimental.unary_unary(request, target, '/lba2pba.DBFileManager/GetFileMap',
+            lba2pba__pb2.FMGetFileMapRequest.SerializeToString,
+            lba2pba__pb2.FMGetFileMapResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def UpdateFM(request,
+    def PushPba(request,
             target,
             options=(),
             channel_credentials=None,
@@ -219,9 +318,9 @@ class Manager(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lba2pba.Manager/UpdateFM',
-            lba2pba__pb2.UpdateFMRequest.SerializeToString,
-            lba2pba__pb2.UpdateFMResponse.FromString,
+        return grpc.experimental.unary_unary(request, target, '/lba2pba.DBFileManager/PushPba',
+            lba2pba__pb2.FMPushPbaRequest.SerializeToString,
+            lba2pba__pb2.FMPushPbaResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -235,17 +334,50 @@ class TraceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.Get = channel.unary_unary(
-                '/lba2pba.Trace/Get',
-                request_serializer=lba2pba__pb2.TGetPbaRequest.SerializeToString,
-                response_deserializer=lba2pba__pb2.TGetPbaResponse.FromString,
+        self.TChangeFile = channel.unary_unary(
+                '/lba2pba.Trace/TChangeFile',
+                request_serializer=lba2pba__pb2.TChangeRequest.SerializeToString,
+                response_deserializer=lba2pba__pb2.TChangeResponse.FromString,
+                )
+        self.TGetFileMap = channel.unary_unary(
+                '/lba2pba.Trace/TGetFileMap',
+                request_serializer=lba2pba__pb2.TGetFileMapRequest.SerializeToString,
+                response_deserializer=lba2pba__pb2.TGetFileMapResponse.FromString,
+                )
+        self.TRegister = channel.unary_unary(
+                '/lba2pba.Trace/TRegister',
+                request_serializer=lba2pba__pb2.TRegisterRequest.SerializeToString,
+                response_deserializer=lba2pba__pb2.TRegisterResponse.FromString,
+                )
+        self.TDeregister = channel.unary_unary(
+                '/lba2pba.Trace/TDeregister',
+                request_serializer=lba2pba__pb2.TDeregisterRequest.SerializeToString,
+                response_deserializer=lba2pba__pb2.TDeregisterResponse.FromString,
                 )
 
 
 class TraceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def Get(self, request, context):
+    def TChangeFile(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def TGetFileMap(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def TRegister(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def TDeregister(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -254,10 +386,25 @@ class TraceServicer(object):
 
 def add_TraceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'Get': grpc.unary_unary_rpc_method_handler(
-                    servicer.Get,
-                    request_deserializer=lba2pba__pb2.TGetPbaRequest.FromString,
-                    response_serializer=lba2pba__pb2.TGetPbaResponse.SerializeToString,
+            'TChangeFile': grpc.unary_unary_rpc_method_handler(
+                    servicer.TChangeFile,
+                    request_deserializer=lba2pba__pb2.TChangeRequest.FromString,
+                    response_serializer=lba2pba__pb2.TChangeResponse.SerializeToString,
+            ),
+            'TGetFileMap': grpc.unary_unary_rpc_method_handler(
+                    servicer.TGetFileMap,
+                    request_deserializer=lba2pba__pb2.TGetFileMapRequest.FromString,
+                    response_serializer=lba2pba__pb2.TGetFileMapResponse.SerializeToString,
+            ),
+            'TRegister': grpc.unary_unary_rpc_method_handler(
+                    servicer.TRegister,
+                    request_deserializer=lba2pba__pb2.TRegisterRequest.FromString,
+                    response_serializer=lba2pba__pb2.TRegisterResponse.SerializeToString,
+            ),
+            'TDeregister': grpc.unary_unary_rpc_method_handler(
+                    servicer.TDeregister,
+                    request_deserializer=lba2pba__pb2.TDeregisterRequest.FromString,
+                    response_serializer=lba2pba__pb2.TDeregisterResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -270,7 +417,7 @@ class Trace(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def Get(request,
+    def TChangeFile(request,
             target,
             options=(),
             channel_credentials=None,
@@ -280,9 +427,60 @@ class Trace(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lba2pba.Trace/Get',
-            lba2pba__pb2.TGetPbaRequest.SerializeToString,
-            lba2pba__pb2.TGetPbaResponse.FromString,
+        return grpc.experimental.unary_unary(request, target, '/lba2pba.Trace/TChangeFile',
+            lba2pba__pb2.TChangeRequest.SerializeToString,
+            lba2pba__pb2.TChangeResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def TGetFileMap(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/lba2pba.Trace/TGetFileMap',
+            lba2pba__pb2.TGetFileMapRequest.SerializeToString,
+            lba2pba__pb2.TGetFileMapResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def TRegister(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/lba2pba.Trace/TRegister',
+            lba2pba__pb2.TRegisterRequest.SerializeToString,
+            lba2pba__pb2.TRegisterResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def TDeregister(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/lba2pba.Trace/TDeregister',
+            lba2pba__pb2.TDeregisterRequest.SerializeToString,
+            lba2pba__pb2.TDeregisterResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -296,28 +494,17 @@ class WorkerStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.Get = channel.unary_unary(
-                '/lba2pba.Worker/Get',
-                request_serializer=lba2pba__pb2.WGetPbaRequest.SerializeToString,
-                response_deserializer=lba2pba__pb2.WGetPbaResponse.FromString,
-                )
-        self.GetShardList = channel.unary_unary(
-                '/lba2pba.Worker/GetShardList',
-                request_serializer=lba2pba__pb2.WGetShardRequest.SerializeToString,
-                response_deserializer=lba2pba__pb2.WGetShardResponse.FromString,
+        self.WInit = channel.unary_unary(
+                '/lba2pba.Worker/WInit',
+                request_serializer=lba2pba__pb2.WInitRequest.SerializeToString,
+                response_deserializer=lba2pba__pb2.WInitResponse.FromString,
                 )
 
 
 class WorkerServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def Get(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def GetShardList(self, request, context):
+    def WInit(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -326,15 +513,10 @@ class WorkerServicer(object):
 
 def add_WorkerServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'Get': grpc.unary_unary_rpc_method_handler(
-                    servicer.Get,
-                    request_deserializer=lba2pba__pb2.WGetPbaRequest.FromString,
-                    response_serializer=lba2pba__pb2.WGetPbaResponse.SerializeToString,
-            ),
-            'GetShardList': grpc.unary_unary_rpc_method_handler(
-                    servicer.GetShardList,
-                    request_deserializer=lba2pba__pb2.WGetShardRequest.FromString,
-                    response_serializer=lba2pba__pb2.WGetShardResponse.SerializeToString,
+            'WInit': grpc.unary_unary_rpc_method_handler(
+                    servicer.WInit,
+                    request_deserializer=lba2pba__pb2.WInitRequest.FromString,
+                    response_serializer=lba2pba__pb2.WInitResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -347,7 +529,7 @@ class Worker(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def Get(request,
+    def WInit(request,
             target,
             options=(),
             channel_credentials=None,
@@ -357,25 +539,8 @@ class Worker(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lba2pba.Worker/Get',
-            lba2pba__pb2.WGetPbaRequest.SerializeToString,
-            lba2pba__pb2.WGetPbaResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def GetShardList(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/lba2pba.Worker/GetShardList',
-            lba2pba__pb2.WGetShardRequest.SerializeToString,
-            lba2pba__pb2.WGetShardResponse.FromString,
+        return grpc.experimental.unary_unary(request, target, '/lba2pba.Worker/WInit',
+            lba2pba__pb2.WInitRequest.SerializeToString,
+            lba2pba__pb2.WInitResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
