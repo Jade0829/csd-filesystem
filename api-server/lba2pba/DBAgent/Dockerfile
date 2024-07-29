@@ -5,4 +5,4 @@ WORKDIR /app
 RUN python3 -m pip install pip --upgrade
 RUN python3 -m pip install -r requirement.txt
 COPY . /app
-CMD [ "python3", "query_agent.py" ]
+CMD [ "python3", "db_agent.py" ]

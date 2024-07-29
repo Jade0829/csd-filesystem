@@ -7,7 +7,6 @@ import grpc
 import lba2pba_pb2
 import lba2pba_pb2_grpc
 
-import ftree_chk
 
 def getIP():
     cmd = "hostname -i"
