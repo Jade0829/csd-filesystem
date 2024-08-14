@@ -54,3 +54,12 @@ def GetPVCInfo():
 
     else:
         return 1, res
+
+def GetPVCInfoTemp():
+    data={}
+    data['subDir'] = 'temp'
+    data['volName'] = 'tmp'
+
+    info={'tmp':data}
+
+    return 0, info
